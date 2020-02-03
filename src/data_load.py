@@ -21,10 +21,7 @@ def data_load(pathes, label_dict):
     return data_list
 
 # 赤色の検出
-def detect_red_color(img):
-    # HSV色空間に変換
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
+def detect_red_color(img, hsv):
     # 赤色のHSVの値域1
     hsv_min = np.array([0,144,153])
     hsv_max = np.array([8,194,252])
@@ -36,10 +33,7 @@ def detect_red_color(img):
     return mask, masked_img
 
 # 青色の検出
-def detect_blue_color(img):
-    # HSV色空間に変換
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
+def detect_blue_color(img, hsv):
     # 青色のHSVの値域1
     hsv_min = np.array([84, 163, 108])
     hsv_max = np.array([104, 203, 155])
@@ -52,6 +46,36 @@ def detect_blue_color(img):
 
     return mask, masked_img
 
+def color_info(img_path):
+    color_arr = np.array([])         
+
+    img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+    img =  cv2.resize(img,(200, 200)) #あとで直す
+
+    # RGB平均値を出力
+    # flattenで一次元化しmeanで平均を取得 
+    b = img.T[0].flatten().mean()
+    g = img.T[1].flatten().mean()
+    r = img.T[2].flatten().mean()
+    
+    # BGRからHSVに変換
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    
+    # HSV平均値を取得
+    # flattenで一次元化しmeanで平均を取得 
+    h = hsv.T[0].flatten().mean()
+    s = hsv.T[1].flatten().mean()
+    v = hsv.T[2].flatten().mean()
+
+    color_arr = np.append(color_arr, r)
+    color_arr = np.append(color_arr, g)
+    color_arr = np.append(color_arr, b)
+    color_arr = np.append(color_arr, h)
+    color_arr = np.append(color_arr, s)
+    color_arr = np.append(color_arr, v)
+
+    return color_arr, hsv, img 
+
 def extract_color_info(data_list):
     tmpA = []
     for item in data_list:
@@ -60,14 +84,14 @@ def extract_color_info(data_list):
         for img_path in img_pathes:
             tmpB = []
             
-            img = cv2.imread(img_path)
-            img =  cv2.resize(img,(200, 200)) #あとで直す
+            color_arr, hsv, img = color_info(img_path)
 
-            red_mask, red_masked_img = detect_red_color(img)
-            blue_mask, bule_masked_img = detect_blue_color(img)
-            
+            red_mask, red_masked_img = detect_red_color(img, hsv)
+            blue_mask, bule_masked_img = detect_blue_color(img, hsv)
+           
             tmpB.append(red_masked_img)
             tmpB.append(bule_masked_img)
+            tmpB.append(color_arr)
             tmpB.append(img_label)
             tmpB.append(img_path)
             tmpA.append(tmpB)

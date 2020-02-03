@@ -1,3 +1,5 @@
+import sys
+sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 import cv2
 import numpy as np
 import glob
@@ -18,10 +20,11 @@ def main():
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    #res_data -> [[赤色抽出した後のhsv, 青色抽出した後のhsv, 正解ラベル, 画像path], [...], ..., [...]]
-    print(res_data[0][1].shape)
-    cv2.imwrite("red_masked_img.png", res_data[0][0])
-    cv2.imwrite("bule_masked_img.png", res_data[0][1])
+    #res_data -> [[赤色抽出した後のhsv, 青色抽出した後のhsv, rgbhsvのそれぞれの平均値, 正解ラベル, 画像path], [...], ..., [...]]
+    print("img_path: ", res_data[0][4])
+    print("(r, g, b, h, s, v): ", res_data[0][2])
+    cv2.imwrite("red_masked_img.png", res_data[9][0])
+    cv2.imwrite("bule_masked_img.png", res_data[9][1])
 
 if __name__ == "__main__":
     main()
