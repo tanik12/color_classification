@@ -20,19 +20,23 @@ def plot(color_info):
     ax = Axes3D(fig)
     
     #軸にラベルを付けたいときは書く
-    ax.set_xlabel("Hue")
-    ax.set_ylabel("Saturation Chroma")
-    ax.set_zlabel("Value Brightness")
+    #ax.set_xlabel("Hue")
+    #ax.set_ylabel("Saturation Chroma")
+    #ax.set_zlabel("Value Brightness")
    
+    ax.set_xlabel("red")
+    ax.set_ylabel("green")
+    ax.set_zlabel("blue")
+    
     for row, info in enumerate(color_info):
-        label = info[3]
+        label = info[4]
         
         if label == 0 or label == 2:
-            ax.scatter(info[2][3], info[2][4], info[2][5], s = 40, c = "blue")
+            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "blue")
         elif label == 1 or label == 3:
-            ax.scatter(info[2][3], info[2][4], info[2][5], s = 40, c = "red")
+            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "red")
         else:
-            ax.scatter(info[2][3], info[2][4], info[2][5], s = 40, c = "yellow")
+            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "yellow")
 
     plt.show()
 

@@ -21,13 +21,13 @@ def main():
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    #res_data -> [[赤色抽出した後のhsv, 青色抽出した後のhsv, rgbhsvのそれぞれの平均値, 正解ラベル, 画像path], [...], ..., [...]]
+    #res_data -> [[赤色抽出した後のhsv, 青色抽出した後のhsv, rgbhsvのそれぞれの平均値, maskしたあとの画像の平均値, 正解ラベル, 画像path], [...], ..., [...]]
     #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
 
-    print("img_path: ", res_data[0][4])
+    print("img_path: ", res_data[0][5])
     print("(r, g, b, h, s, v): ", res_data[0][2])
-    cv2.imwrite("red_masked_img.png", res_data[9][0])
-    cv2.imwrite("bule_masked_img.png", res_data[9][1])
+    cv2.imwrite("red_masked_img.png", res_data[4][0])
+    cv2.imwrite("bule_masked_img.png", res_data[4][1])
 
     plot(res_data)
 
