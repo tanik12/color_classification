@@ -13,7 +13,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import pickle
 
-def train(x_train, y_train):
+def train(x_train, y_train, model_dirpath):
     x_train = x_train.values
     y_train = y_train.values
 
@@ -34,14 +34,17 @@ def train(x_train, y_train):
     accuracy_train = accuracy_score(y_train, pred_train)
     print('トレーニングデータに対する正解率： %.2f' % accuracy_train)
 
-    current_path = os.getcwd()
-    model_dirpath = current_path + "/model"
     dir_check(model_dirpath)
     
     with open(model_dirpath + "/model.pickle", mode='wb') as fp:
         print("start seva model")
         pickle.dump(model, fp)
         print("Model was successfully saved!")
+
+    clf = load_model(model_dirpath)
+    pred_train = clf.predict(x_train)
+    accuracy_train = accuracy_score(y_train, pred_train)
+    print('トレーニングデータに対する正解率： %.2f' % accuracy_train)
 
 def dir_check(model_dirpath):
     if os.path.exists(model_dirpath):
@@ -53,7 +56,18 @@ def dir_check(model_dirpath):
         
         print("Made directory to save model file!!!")
 
+def load_model(model_dirpath):
+    if os.path.isfile(model_dirpath + "/model.pickle"):
+        with open(model_dirpath + "/model.pickle", mode='rb') as fp:
+            clf = pickle.load(fp)
+            return clf
+    else:
+        print("Do not exist model file! Please make model file.")
+
 if __name__ == "__main__":
+    current_path = os.getcwd()
+    model_dirpath = current_path + "/model"
+    
     #res_data -> [[赤色抽出後のhsv, 青色抽出後のhsv, rgbhsvの各々平均値, mask後の画像の平均値, 正解ラベル, 画像path], [...], ..., [...]]
     #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
 
@@ -71,4 +85,4 @@ if __name__ == "__main__":
 
     res = pd.DataFrame(res_data, columns=['hsv_after_red', 'hsv_after_blue', 'avg_rgbhsv', 'avg_after_img', 'label', 'img_path'])
     mass_data = res[['avg_rgbhsv', 'avg_after_img', 'label']]
-    train(mass_data['avg_rgbhsv'], mass_data['label'])
+    train(mass_data['avg_rgbhsv'], mass_data['label'], model_dirpath)
