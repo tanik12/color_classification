@@ -74,7 +74,7 @@ def color_info(img_path):
     color_arr = np.array([])         
 
     img = cv2.imread(img_path, cv2.IMREAD_COLOR)
-    img =  cv2.resize(img,(200, 200)) #あとで直す
+    img =  cv2.resize(img,(50, 50)) #あとで直す
 
     # RGB平均値を出力
     # flattenで一次元化しmeanで平均を取得 
