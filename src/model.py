@@ -24,8 +24,8 @@ def train(x_train, y_train, model_dirpath):
     x_train = init_train
 
     print(x_train.shape, y_train.shape)
+    print(x_train[0], y_train[0])
 
-    # 線形SVMのインスタンスを生成
     model = SVC(kernel='rbf', gamma=0.001)
 
     # モデルの学習。fit関数で行う。
@@ -61,21 +61,13 @@ def load_model(model_dirpath):
         sys.exit()
 
 def inference(x_train, y_train, model_dirpath):
-    x_train = x_train.values
-    y_train = y_train.values
-
-    init_train = np.zeros((63, 6))
-    for idx, chunk in enumerate(x_train):
-        init_train[idx] = chunk
-    
-    x_train = init_train
-
-    print(x_train.shape, y_train.shape)
+    x_train = x_train.reshape(1, -1)
+    y_train = y_train.reshape(1, -1)
 
     clf = load_model(model_dirpath)
-    pred_train = clf.predict(x_train)
-    accuracy_train = accuracy_score(y_train, pred_train)
-    print('トレーニングデータに対する正解率： %.2f' % accuracy_train)
+    pred = clf.predict(x_train)
+
+    print("予想ラベル出力: ", pred)
 
 if __name__ == "__main__":
     current_path = os.getcwd()
@@ -99,4 +91,7 @@ if __name__ == "__main__":
     res = pd.DataFrame(res_data, columns=['hsv_after_red', 'hsv_after_blue', 'avg_rgbhsv', 'avg_after_img', 'label', 'img_path'])
     mass_data = res[['avg_rgbhsv', 'avg_after_img', 'label']]
     train(mass_data['avg_rgbhsv'], mass_data['label'], model_dirpath)
-    inference(mass_data['avg_rgbhsv'], mass_data['label'], model_dirpath)
+
+    test_x = np.array([64.4052, 85.112, 87.6772, 102.0968, 64.3176, 89.7904])
+    test_y = np.array([0])
+    inference(test_x, test_y,  model_dirpath)
