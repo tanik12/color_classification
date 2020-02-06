@@ -11,6 +11,7 @@ from visualize import plot
 
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+import pickle
 
 def train(x_train, y_train):
     x_train = x_train.values
@@ -25,13 +26,32 @@ def train(x_train, y_train):
     print(x_train.shape, y_train.shape)
 
     # 線形SVMのインスタンスを生成
-    model = SVC(kernel='linear', random_state=None)
+    model = SVC(kernel='rbf', gamma=0.001)
 
     # モデルの学習。fit関数で行う。
     model.fit(x_train, y_train)
     pred_train = model.predict(x_train)
     accuracy_train = accuracy_score(y_train, pred_train)
     print('トレーニングデータに対する正解率： %.2f' % accuracy_train)
+
+    current_path = os.getcwd()
+    model_dirpath = current_path + "/model"
+    dir_check(model_dirpath)
+    
+    with open(model_dirpath + "/model.pickle", mode='wb') as fp:
+        print("start seva model")
+        pickle.dump(model, fp)
+        print("Model was successfully saved!")
+
+def dir_check(model_dirpath):
+    if os.path.exists(model_dirpath):
+        print("Directory exists to save model file!!!")
+    else:
+        print("Directory did not exist to save model file...")
+        print("Make directory to save model file...")
+        os.mkdir(model_dirpath)
+        
+        print("Made directory to save model file!!!")
 
 if __name__ == "__main__":
     #res_data -> [[赤色抽出後のhsv, 青色抽出後のhsv, rgbhsvの各々平均値, mask後の画像の平均値, 正解ラベル, 画像path], [...], ..., [...]]
