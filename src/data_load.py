@@ -22,6 +22,8 @@ def data_load(pathes, label_dict):
 
 # 赤色の検出
 def detect_red_color(img, hsv):
+    tmp = np.array([])
+
     # 赤色のHSVの値域1
     hsv_min = np.array([0,144,153])
     hsv_max = np.array([8,194,252])
@@ -30,10 +32,22 @@ def detect_red_color(img, hsv):
     # マスキング処理
     masked_img = cv2.bitwise_and(img, img, mask=mask)
 
-    return mask, masked_img
+    # RGB平均値を出力
+    # flattenで一次元化しmeanで平均を取得 
+    b = masked_img.T[0].flatten().mean()
+    g = masked_img.T[1].flatten().mean()
+    r = masked_img.T[2].flatten().mean()
+
+    tmp = np.append(tmp, r)
+    tmp = np.append(tmp, g)
+    tmp = np.append(tmp, b)
+
+    return mask, masked_img, tmp
 
 # 青色の検出
 def detect_blue_color(img, hsv):
+    tmp = np.array([])
+
     # 青色のHSVの値域1
     hsv_min = np.array([84, 163, 108])
     hsv_max = np.array([104, 203, 155])
@@ -44,7 +58,17 @@ def detect_blue_color(img, hsv):
     # マスキング処理
     masked_img = cv2.bitwise_and(img, img, mask=mask)
 
-    return mask, masked_img
+    # RGB平均値を出力
+    # flattenで一次元化しmeanで平均を取得 
+    b = masked_img.T[0].flatten().mean()
+    g = masked_img.T[1].flatten().mean()
+    r = masked_img.T[2].flatten().mean()
+
+    tmp = np.append(tmp, r)
+    tmp = np.append(tmp, g)
+    tmp = np.append(tmp, b)
+
+    return mask, masked_img, tmp
 
 def color_info(img_path):
     color_arr = np.array([])         
@@ -86,15 +110,20 @@ def extract_color_info(data_list):
             
             color_arr, hsv, img = color_info(img_path)
 
-            red_mask, red_masked_img = detect_red_color(img, hsv)
-            blue_mask, bule_masked_img = detect_blue_color(img, hsv)
-           
+            red_mask, red_masked_img, avg_red_masked_img = detect_red_color(img, hsv)
+            blue_mask, bule_masked_img, avg_blue_masked_img = detect_blue_color(img, hsv)
+            
+            sum_array = avg_red_masked_img + avg_blue_masked_img   
+
             tmpB.append(red_masked_img)
             tmpB.append(bule_masked_img)
             tmpB.append(color_arr)
+            tmpB.append(sum_array)
             tmpB.append(img_label)
             tmpB.append(img_path)
+
             tmpA.append(tmpB)
+
     return tmpA
 
 if __name__ == "__main__":
