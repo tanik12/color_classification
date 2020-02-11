@@ -16,16 +16,17 @@ def plot(color_info):
     ax.set_xlabel("red")
     ax.set_ylabel("green")
     ax.set_zlabel("blue")
-    
+
     for row, info in enumerate(color_info):
-        label = info[4]
+        label = info[6]
         
         if label == 0 or label == 2:
-            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "blue")
+            ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "blue")
         elif label == 1 or label == 3:
-            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "red")
+            ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "red")
         else:
-            ax.scatter(info[3][0], info[3][1], info[3][2], s = 10, c = "yellow")
+            print(info[7], row)
+            ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "yellow")
 
     plt.show()
 

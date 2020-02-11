@@ -51,8 +51,54 @@ def detect_blue_color(img, hsv):
     # 青色のHSVの値域1
     hsv_min = np.array([84, 163, 108])
     hsv_max = np.array([104, 203, 155])
+    mask = cv2.inRange(hsv, hsv_min, hsv_max)
 
-    # 青色領域のマスク（255：赤色、0：赤色以外）    
+    # マスキング処理
+    masked_img = cv2.bitwise_and(img, img, mask=mask)
+
+    # RGB平均値を出力
+    # flattenで一次元化しmeanで平均を取得 
+    b = masked_img.T[0].flatten().mean()
+    g = masked_img.T[1].flatten().mean()
+    r = masked_img.T[2].flatten().mean()
+
+    tmp = np.append(tmp, r)
+    tmp = np.append(tmp, g)
+    tmp = np.append(tmp, b)
+
+    return mask, masked_img, tmp
+
+# 緑色の検出
+def detect_green_color(img, hsv):
+    tmp = np.array([])
+
+    # 色のHSVの値域1
+    hsv_min = np.array([30, 64, 0])
+    hsv_max = np.array([90, 255, 255])
+    mask = cv2.inRange(hsv, hsv_min, hsv_max)
+
+    # マスキング処理
+    masked_img = cv2.bitwise_and(img, img, mask=mask)
+
+    # RGB平均値を出力
+    # flattenで一次元化しmeanで平均を取得 
+    b = masked_img.T[0].flatten().mean()
+    g = masked_img.T[1].flatten().mean()
+    r = masked_img.T[2].flatten().mean()
+
+    tmp = np.append(tmp, r)
+    tmp = np.append(tmp, g)
+    tmp = np.append(tmp, b)
+
+    return mask, masked_img, tmp
+
+# 黄色の検出
+def detect_yellow_color(img, hsv):
+    tmp = np.array([])
+
+    # 色のHSVの値域1
+    hsv_min = np.array([20, 80, 10])
+    hsv_max = np.array([50, 255, 255])
     mask = cv2.inRange(hsv, hsv_min, hsv_max)
 
     # マスキング処理
@@ -112,11 +158,19 @@ def extract_color_info(data_list):
 
             red_mask, red_masked_img, avg_red_masked_img = detect_red_color(img, hsv)
             blue_mask, bule_masked_img, avg_blue_masked_img = detect_blue_color(img, hsv)
+            green_mask, green_masked_img, avg_green_masked_img = detect_green_color(img, hsv)
+            yellow_mask, yellow_masked_img, avg_yellow_masked_img = detect_yellow_color(img, hsv)
             
-            sum_array = avg_red_masked_img + avg_blue_masked_img   
+            ######
+            #要検討
+            #sum_array = avg_red_masked_img + avg_blue_masked_img + avg_green_masked_img + yellow_masked_img  
+            sum_array = (avg_red_masked_img + (avg_blue_masked_img + avg_green_masked_img)/2 + avg_yellow_masked_img) / 3 
+            #######
 
             tmpB.append(red_masked_img)
             tmpB.append(bule_masked_img)
+            tmpB.append(green_masked_img)
+            tmpB.append(yellow_masked_img)
             tmpB.append(color_arr)
             tmpB.append(sum_array)
             tmpB.append(img_label)
@@ -139,6 +193,9 @@ if __name__ == "__main__":
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    print(res_data[3])
-    cv2.imwrite("red_masked_img.png", res_data[0][0])
-    cv2.imwrite("bule_masked_img.png", res_data[0][1])
+    print("img_path: ", res_data[4][7])
+    print("(r, g, b, h, s, v): ", res_data[4][4])
+    cv2.imwrite("red_masked_img.png", res_data[4][0])
+    cv2.imwrite("bule_masked_img.png", res_data[4][1])
+    cv2.imwrite("green_masked_img.png", res_data[4][2])
+    cv2.imwrite("yellow_masked_img.png", res_data[4][3])
