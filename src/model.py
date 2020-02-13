@@ -14,10 +14,12 @@ from sklearn.metrics import accuracy_score
 import pickle
 
 def train(x_train, y_train, model_dirpath):
+    feature_num = 6
     x_train = x_train.values
     y_train = y_train.values
 
-    init_train = np.zeros((63, 6))
+    init_train = np.zeros((x_train.shape[0], feature_num))
+    #init_train = np.zeros((63, 6))
     for idx, chunk in enumerate(x_train):
         init_train[idx] = chunk
     

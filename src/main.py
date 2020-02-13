@@ -15,9 +15,13 @@ from sklearn.metrics import accuracy_score
 import pickle
 
 def main():
-    label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    label_dict = {"pedestrian_signal_blue":0, "pedestrian_signal_red":1, 
+                  "traffic_signal_blue":2, "traffic_signal_red":3, "traffic_signal_yellow":4, 
+                  "pedestrian_signal_unknown":5, "traffic_signal_unknown":6}
 
-    data_dir = "data/sample_trim/*"
+    #data_dir = "data/sample_trim/*"
+    data_dir = "data/trim_img/*"
     current_dir = os.chdir('../')
     current_dir = os.getcwd()
 
@@ -43,7 +47,7 @@ def main():
     cv2.imwrite("yellow_masked_img.png", res_data[56][3])
 
     plot(res_data)
-    plot_hist(res_data)
+    lot_hist(res_data)
 
     #################
     #mashine learning

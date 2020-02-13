@@ -10,6 +10,7 @@ def data_load(pathes, label_dict):
         data_dict = {}
         img_path = os.path.join(path, '*')
         img_path = glob.glob(img_path)
+
         label = path.split('/')[-1]
         label_num = label_dict[label]
         
