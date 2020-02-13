@@ -23,8 +23,8 @@ def train(x_train, y_train, model_dirpath):
     
     x_train = init_train
 
-    print(x_train.shape, y_train.shape)
-    print(x_train[0], y_train[0])
+    #print(x_train.shape, y_train.shape)
+    #print(x_train[0], y_train[0])
 
     model = SVC(kernel='rbf', gamma=0.001)
 
@@ -88,7 +88,11 @@ if __name__ == "__main__":
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    res = pd.DataFrame(res_data, columns=['hsv_after_red', 'hsv_after_blue', 'avg_rgbhsv', 'avg_after_img', 'label', 'img_path'])
+    res = pd.DataFrame(res_data, 
+                       columns=['hsv_after_red', 'hsv_after_blue', 'hsv_after_green','hsv_after_yellow',
+                                'avg_rgbhsv', 'avg_after_img', 'hist_color', 'label', 'img_path']
+                        )
+
     mass_data = res[['avg_rgbhsv', 'avg_after_img', 'label']]
     train(mass_data['avg_rgbhsv'], mass_data['label'], model_dirpath)
 

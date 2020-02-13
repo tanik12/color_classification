@@ -148,13 +148,19 @@ def color_info(img_path):
 
 def extract_color_info(data_list):
     tmpA = []
+
     for item in data_list:
         img_pathes = item["img_pathes"]
         img_label = item["label"]
         for img_path in img_pathes:
             tmpB = []
+            hist_clr = np.array([])
             
             color_arr, hsv, img = color_info(img_path)
+
+            hist_r, hist_g, hist_b = color_hist(img)
+            hist_clr = np.vstack((hist_r, hist_g))
+            hist_clr = np.vstack((hist_clr, hist_b))
 
             red_mask, red_masked_img, avg_red_masked_img = detect_red_color(img, hsv)
             blue_mask, bule_masked_img, avg_blue_masked_img = detect_blue_color(img, hsv)
@@ -173,12 +179,23 @@ def extract_color_info(data_list):
             tmpB.append(yellow_masked_img)
             tmpB.append(color_arr)
             tmpB.append(sum_array)
+            tmpB.append(hist_clr)
             tmpB.append(img_label)
             tmpB.append(img_path)
 
             tmpA.append(tmpB)
 
     return tmpA
+
+#colorヒストグラムの取得
+def color_hist(img):
+    r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
+
+    hist_r, bins = np.histogram(r.ravel(),256,[0,256])
+    hist_g, bins = np.histogram(g.ravel(),256,[0,256])
+    hist_b, bins = np.histogram(b.ravel(),256,[0,256])
+
+    return hist_r, hist_g, hist_b
 
 if __name__ == "__main__":
     label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
@@ -193,9 +210,9 @@ if __name__ == "__main__":
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    print("img_path: ", res_data[4][7])
-    print("(r, g, b, h, s, v): ", res_data[4][4])
-    cv2.imwrite("red_masked_img.png", res_data[4][0])
-    cv2.imwrite("bule_masked_img.png", res_data[4][1])
-    cv2.imwrite("green_masked_img.png", res_data[4][2])
-    cv2.imwrite("yellow_masked_img.png", res_data[4][3])
+    print("img_path: ", res_data[56][8])
+    print("(r, g, b, h, s, v): ", res_data[56][4])
+    cv2.imwrite("red_masked_img.png", res_data[56][0])
+    cv2.imwrite("bule_masked_img.png", res_data[56][1])
+    cv2.imwrite("green_masked_img.png", res_data[56][2])
+    cv2.imwrite("yellow_masked_img.png", res_data[56][3])
