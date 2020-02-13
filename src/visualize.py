@@ -18,7 +18,7 @@ def plot(color_info):
     ax.set_zlabel("blue")
 
     for row, info in enumerate(color_info):
-        label = info[6]
+        label = info[7]
         
         if label == 0 or label == 2:
             ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "blue")
