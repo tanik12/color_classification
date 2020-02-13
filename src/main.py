@@ -7,7 +7,7 @@ import glob
 import os
 
 from data_load import data_load, extract_color_info 
-from visualize import plot
+from visualize import plot, plot_hist
 from model import train, dir_check, load_model, inference
 
 from sklearn.svm import SVC
@@ -29,7 +29,7 @@ def main():
 
     ################
     #res_data -> [[赤色抽出した後のhsv, 青色抽出した後のhsv, 緑色抽出した後のhsv, 黄色抽出した後のhsv,
-    #              rgbhsvのそれぞれの平均値, maskしたあとの画像の平均値, 正解ラベル, 画像path], [...], ..., [...]]
+    #              rgbhsvのそれぞれの平均値, maskしたあとの画像の平均値, color hist, 正解ラベル, 画像path], [...], ..., [...]]
 
     #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, 
     #              "vehicle_signal_red":3, "vehicle_signal_yellow":4}
@@ -43,6 +43,7 @@ def main():
     cv2.imwrite("yellow_masked_img.png", res_data[56][3])
 
     plot(res_data)
+    plot_hist(res_data)
 
     #################
     #mashine learning

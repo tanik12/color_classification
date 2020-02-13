@@ -159,9 +159,11 @@ def extract_color_info(data_list):
             color_arr, hsv, img = color_info(img_path)
 
             hist_r, hist_g, hist_b = color_hist(img)
-            hist_clr = np.append(hist_clr, hist_r)
-            hist_clr = np.append(hist_clr, hist_g)
-            hist_clr = np.append(hist_clr, hist_b)
+            hist_clr = np.vstack((hist_r, hist_g))
+            hist_clr = np.vstack((hist_clr, hist_b))
+            #hist_clr = np.append(hist_clr, hist_r)
+            #hist_clr = np.append(hist_clr, hist_g)
+            #hist_clr = np.append(hist_clr, hist_b)
 
             red_mask, red_masked_img, avg_red_masked_img = detect_red_color(img, hsv)
             blue_mask, bule_masked_img, avg_blue_masked_img = detect_blue_color(img, hsv)
@@ -189,7 +191,7 @@ def extract_color_info(data_list):
     return tmpA
 
 def color_hist(img):
-    b, g, r = img[:,:,0], img[:,:,1], img[:,:,2]
+    r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
 
     hist_r, bins = np.histogram(r.ravel(),256,[0,256])
     hist_g, bins = np.histogram(g.ravel(),256,[0,256])
@@ -210,9 +212,9 @@ if __name__ == "__main__":
     data_list = data_load(path_list, label_dict)
     res_data = extract_color_info(data_list)
 
-    print("img_path: ", res_data[4][7])
-    print("(r, g, b, h, s, v): ", res_data[4][4])
-    cv2.imwrite("red_masked_img.png", res_data[4][0])
-    cv2.imwrite("bule_masked_img.png", res_data[4][1])
-    cv2.imwrite("green_masked_img.png", res_data[4][2])
-    cv2.imwrite("yellow_masked_img.png", res_data[4][3])
+    print("img_path: ", res_data[56][8])
+    print("(r, g, b, h, s, v): ", res_data[56][4])
+    cv2.imwrite("red_masked_img.png", res_data[56][0])
+    cv2.imwrite("bule_masked_img.png", res_data[56][1])
+    cv2.imwrite("green_masked_img.png", res_data[56][2])
+    cv2.imwrite("yellow_masked_img.png", res_data[56][3])
