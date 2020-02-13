@@ -161,9 +161,6 @@ def extract_color_info(data_list):
             hist_r, hist_g, hist_b = color_hist(img)
             hist_clr = np.vstack((hist_r, hist_g))
             hist_clr = np.vstack((hist_clr, hist_b))
-            #hist_clr = np.append(hist_clr, hist_r)
-            #hist_clr = np.append(hist_clr, hist_g)
-            #hist_clr = np.append(hist_clr, hist_b)
 
             red_mask, red_masked_img, avg_red_masked_img = detect_red_color(img, hsv)
             blue_mask, bule_masked_img, avg_blue_masked_img = detect_blue_color(img, hsv)
@@ -190,6 +187,7 @@ def extract_color_info(data_list):
 
     return tmpA
 
+#colorヒストグラムの取得
 def color_hist(img):
     r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
 
