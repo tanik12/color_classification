@@ -28,7 +28,7 @@ def train(x_train, y_train, model_dirpath):
     #print(x_train.shape, y_train.shape)
     #print(x_train[0], y_train[0])
 
-    model = SVC(kernel='rbf', gamma=0.001)
+    model = SVC(kernel='rbf', gamma=0.015)
 
     # モデルの学習。fit関数で行う。
     model.fit(x_train, y_train)
@@ -78,9 +78,10 @@ if __name__ == "__main__":
     #res_data -> [[赤色抽出後のhsv, 青色抽出後のhsv, rgbhsvの各々平均値, mask後の画像の平均値, 正解ラベル, 画像path], [...], ..., [...]]
     #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
 
-    label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    label_dict = {"blue":0, "red":1, "yellow":2, "unknown":3}
 
-    data_dir = "data/sample_trim/*"
+    data_dir = "data/trim_img/*"
     current_dir = os.chdir('../')
     current_dir = os.getcwd()
 
