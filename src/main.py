@@ -16,9 +16,10 @@ import pickle
 
 def main():
     #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
-    label_dict = {"pedestrian_signal_blue":0, "pedestrian_signal_red":1, 
-                  "traffic_signal_blue":2, "traffic_signal_red":3, "traffic_signal_yellow":4, 
-                  "pedestrian_signal_unknown":5, "traffic_signal_unknown":6}
+    ###label_dict = {"pedestrian_signal_blue":0, "pedestrian_signal_red":1, 
+    ###              "traffic_signal_blue":2, "traffic_signal_red":3, "traffic_signal_yellow":4, 
+    ###              "pedestrian_signal_unknown":5, "traffic_signal_unknown":6}
+    label_dict = {"blue":0, "red":1, "yellow":2, "unknown":3}
 
     #data_dir = "data/sample_trim/*"
     data_dir = "data/trim_img/*"
@@ -29,6 +30,7 @@ def main():
     path_list = glob.glob(target_pathes)
 
     data_list = data_load(path_list, label_dict)
+    print(data_list)
     res_data = extract_color_info(data_list)
 
     ################
@@ -47,7 +49,7 @@ def main():
     cv2.imwrite("yellow_masked_img.png", res_data[56][3])
 
     plot(res_data)
-    lot_hist(res_data)
+    plot_hist(res_data)
 
     #################
     #mashine learning

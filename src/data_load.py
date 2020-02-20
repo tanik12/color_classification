@@ -18,6 +18,7 @@ def data_load(pathes, label_dict):
         data_dict["label"] = label_num
         
         data_list.append(data_dict)
+    print(data_list)
 
     return data_list
 
@@ -199,9 +200,10 @@ def color_hist(img):
     return hist_r, hist_g, hist_b
 
 if __name__ == "__main__":
-    label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    #label_dict = {"pedestrian_signs_blue":0, "pedestrian_signs_red":1, "vehicle_signal_blue":2, "vehicle_signal_red":3, "vehicle_signal_yellow":4}
+    label_dict = {"blue":0, "red":1, "yellow":2, "unknown":3}
 
-    data_dir = "data/sample_trim/*"
+    data_dir = "data/trim_img/*"
     current_dir = os.chdir('../')
     current_dir = os.getcwd()
 

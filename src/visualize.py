@@ -15,12 +15,14 @@ def plot(color_info):
 
     for row, info in enumerate(color_info):
         label = info[7]
-        if label == 0 or label == 2:
+        if label == 0:
             ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "blue")
-        elif label == 1 or label == 3:
+        elif label == 1:
             ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "red")
-        else:
+        elif label == 2:
             ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "yellow")
+        else:
+            ax.scatter(info[5][0], info[5][1], info[5][2], s = 10, c = "black")
 
     plt.show()
 
